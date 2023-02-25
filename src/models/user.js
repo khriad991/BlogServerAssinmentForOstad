@@ -5,10 +5,13 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    userName: {
+    fatherName:{
         type: String,
         required: true,
-        unique: true
+    },
+    motherName:{
+        type: String,
+        required: true,
     },
     email: {
         type: String,
@@ -18,8 +21,12 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    }
-},{versionKey:false},{timeStamp:true});
+    },
+    photo:{type:String}
+},{
+    versionKey:false,
+    timestamps:true
+});
 
 const User = mongoose.model('User', userSchema);
 

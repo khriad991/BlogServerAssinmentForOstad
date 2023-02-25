@@ -1,8 +1,9 @@
 
 const User = require("../models/user");
+const jwt =require('jsonwebtoken')
+
+
 // C===== >>> Create
-
-
 exports.userRegistetion=(req, res)=>{
     let reqBody = req.body;
 
@@ -14,22 +15,18 @@ exports.userRegistetion=(req, res)=>{
     })
 }
 
-//R ==== login ----------
-exports.logIn = (req, res)
-
-
-
-exports.login=(req,res)=>{
+// ==== login ----------
+exports.singIn=(req,res)=>{
     let reqBody=req.body
-    UsersModel.aggregate([
+    User.aggregate([
         {$match:reqBody},
-        {$project:{_id:0,email:1,firstName:1,lastName:1,mobile:1,photo:1}}
+        {$project:{_id:0,email:1,name:1,fatherName:1,motherName:1,}}
     ],(err,data)=>{
         if(err){
             res.status(400).json({status:"fail",data:err})
         }
         else {
-            if(data.length>0){
+            if(data.length > 0){
                 let Payload={exp: Math.floor(Date.now() / 1000) + (24*60*60), data:data[0]['email']}
                 let token = jwt.sign( Payload,'SecretKey123456789');
                 res.status(200).json({status:"success",token:token,data:data[0]})
@@ -44,22 +41,4 @@ exports.login=(req,res)=>{
 
 
 
-
-
-// U=== Update
-exports.updateProduct= (req,res)=>{
-    let id = req.params.id;
-    let query = {_id:id};
-    let reqBody = req.body
-
-    User.updateOne(query,reqBody,(err,data)=>{
-        if(err){
-            res.status(400).json({status:"fail", data:err})
-        }else {
-            res.status(200).json({status:"success", data:data})
-        }
-    })
-}
-
-// D===Delete ------------
 
